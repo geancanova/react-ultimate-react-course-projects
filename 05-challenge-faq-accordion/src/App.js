@@ -146,6 +146,8 @@ function Form({ onAddItem }) {
   function handleSubmit(e) {
     e.preventDefault();
 
+    if (!question || !answer) return;
+
     const newItem = { question, answer };
 
     onAddItem(newItem);
