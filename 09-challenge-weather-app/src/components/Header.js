@@ -1,24 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { useKey } from "../hooks/useKey";
-
-function Header({ userCity, onButtonClick, onSearchCity }) {
-  const inputEl = useRef(null);
-  const [city, setCity] = useState("");
-
-  useKey("Enter", function () {
-    if (!city) return;
-
-    setCity((city) => sanitizeString(city));
-    onSearchCity(city);
-    inputEl.current.blur();
-  });
-
-  function sanitizeString(str) {
-    return str.replace(/\s\s+/g, " ");
-  }
-
-  useEffect(() => setCity(userCity), [userCity]);
-
+function Header({
+  inputPlaceholder,
+  inputVal,
+  inputRef,
+  onInputChange,
+  onInputFocus,
+  onButtonClick,
+}) {
   return (
     <header className="header">
       <h1>
@@ -31,11 +18,11 @@ function Header({ userCity, onButtonClick, onSearchCity }) {
       <div>
         <input
           type="text"
-          placeholder="Search for a city"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          onFocus={() => setCity("")}
-          ref={inputEl}
+          placeholder={inputPlaceholder}
+          value={inputVal}
+          onChange={(e) => onInputChange(e.target.value)}
+          onFocus={onInputFocus}
+          ref={inputRef}
         />
       </div>
       <p>

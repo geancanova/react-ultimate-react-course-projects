@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+// Custom Hooks
+import { useKey } from "./hooks/useKey";
 
 // Components
 import Header from "./components/Header";
@@ -7,6 +10,7 @@ import Forecast from "./components/Forecast";
 import Weather from "./components/Weather";
 import Loader from "./components/Loader";
 
+// Env vars
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 function App() {
@@ -14,6 +18,7 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const inputEl = useRef(null);
 
   function getUserLocation() {
     function success(position) {
@@ -60,7 +65,6 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         const dataWeather = data.list;
         const dataWeatherDays = getEveryNth(dataWeather, 8);
         const dataWeatherInfo = dataWeatherDays.map((weather) => {
@@ -112,13 +116,37 @@ function App() {
     return result;
   }
 
+  function handleSearchCity() {
+    if (!city) return;
+
+    setCity((city) => sanitizeString(city));
+    fetchCityCoords(city);
+    inputEl.current.blur();
+  }
+
+  useKey("Enter", handleSearchCity);
+
+  function handleInputFocus() {
+    if (!city) return;
+
+    setForecast([]);
+    setCity("");
+  }
+
+  function sanitizeString(str) {
+    return str.replace(/\s\s+/g, " ");
+  }
+
   return (
     <div className="app">
       <>
         <Header
-          userCity={city}
+          inputPlaceholder="Search for a city"
+          inputVal={city}
+          onInputChange={setCity}
+          onInputFocus={handleInputFocus}
           onButtonClick={getUserLocation}
-          onSearchCity={(city) => fetchCityCoords(city)}
+          inputRef={inputEl}
         />
         <Main>
           {(() => {
