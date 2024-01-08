@@ -6,7 +6,6 @@ import Main from "./components/Main";
 import Forecast from "./components/Forecast";
 import Weather from "./components/Weather";
 import Loader from "./components/Loader";
-// import { useGeolocation } from "./hooks/useGeolocation";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
