@@ -3,6 +3,13 @@ import { useState, useRef } from "react";
 // Custom Hooks
 import { useKey } from "./hooks/useKey";
 
+// Utils
+import {
+  getWeekdayFromDatetime,
+  getEveryNth,
+  removeStringExtraSpaces,
+} from "./utils";
+
 // Components
 import Header from "./components/Header";
 import Main from "./components/Main";
@@ -19,6 +26,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const inputEl = useRef(null);
+
+  useKey("Enter", handleSearchCity);
 
   function getUserLocation() {
     function success(position) {
@@ -68,7 +77,7 @@ function App() {
         const dataWeather = data.list;
         const dataWeatherDays = getEveryNth(dataWeather, 8);
         const dataWeatherInfo = dataWeatherDays.map((weather) => {
-          const day = getWeekday(weather.dt);
+          const day = getWeekdayFromDatetime(weather.dt);
           const temp = Math.round(weather.main.temp);
           const icon = weather.weather[0].icon;
           const status = weather.weather[0].main;
@@ -100,41 +109,19 @@ function App() {
       .catch((err) => setError(err.message));
   }
 
-  function getWeekday(dt) {
-    const date = new Date(dt * 1000);
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return days[date.getDay()];
-  }
-
-  function getEveryNth(arr, nth) {
-    const result = [];
-
-    for (let i = 0; i < arr.length; i += nth) {
-      result.push(arr[i]);
-    }
-
-    return result;
-  }
-
   function handleSearchCity() {
     if (!city) return;
 
-    setCity((city) => sanitizeString(city));
+    setCity((city) => removeStringExtraSpaces(city));
     fetchCityCoords(city);
     inputEl.current.blur();
   }
-
-  useKey("Enter", handleSearchCity);
 
   function handleInputFocus() {
     if (!city) return;
 
     setForecast([]);
     setCity("");
-  }
-
-  function sanitizeString(str) {
-    return str.replace(/\s\s+/g, " ");
   }
 
   return (
