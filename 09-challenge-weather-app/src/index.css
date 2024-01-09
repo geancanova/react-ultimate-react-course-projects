@@ -140,6 +140,22 @@ body {
   padding: 15px;
 }
 
+@media (max-width: 768px) {
+  .forecast {
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    width: 100vw;
+    margin-left: -5.55%;
+    margin-right: -5.55%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .weather {
+    flex: 0;
+  }
+}
+
 .weather-day {
   margin: 0;
 }
