@@ -39,9 +39,7 @@ function City() {
       <div className={styles.row}>
         <h6>City name</h6>
         <h3>
-          <span>
-            <EmojiFlagImage emoji={emoji} />
-          </span>{" "}
+          <span>{emoji && <EmojiFlagImage emoji={emoji} />}</span>
           {cityName}
         </h3>
       </div>
