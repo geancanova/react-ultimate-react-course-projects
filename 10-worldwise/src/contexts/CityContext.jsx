@@ -9,26 +9,13 @@ function CitiesProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [currentCity, setCurrentCity] = useState({});
 
-  function flagemojiToPNG(flag) {
-    var countryCode = Array.from(flag, (codeUnit) => codeUnit.codePointAt())
-      .map((char) => String.fromCharCode(char - 127397).toLowerCase())
-      .join("");
-    return (
-      <img src={`https://flagcdn.com/24x18/${countryCode}.png`} alt="flag" />
-    );
-  }
-
   useEffect(function () {
     async function fetchCities() {
       try {
         setIsLoading(true);
         const res = await fetch(`${BASE_URL}/cities`);
         const data = await res.json();
-        const updatedData = data.map((item) => ({
-          ...item,
-          emoji: flagemojiToPNG(item.emoji),
-        }));
-        setCities(updatedData);
+        setCities(data);
       } catch (error) {
         alert("There was an error loading data...");
       } finally {
@@ -44,11 +31,27 @@ function CitiesProvider({ children }) {
       setIsLoading(true);
       const res = await fetch(`${BASE_URL}/cities/${id}`);
       const data = await res.json();
-      const updatedData = {
-        ...data,
-        emoji: flagemojiToPNG(data.emoji),
-      };
-      setCurrentCity(updatedData);
+      setCurrentCity(data);
+    } catch (error) {
+      alert("There was an error loading data...");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function createCity(newCity) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities/`, {
+        method: "POST",
+        body: JSON.stringify(newCity),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      setCities((cities) => [...cities, data]);
     } catch (error) {
       alert("There was an error loading data...");
     } finally {
@@ -57,7 +60,15 @@ function CitiesProvider({ children }) {
   }
 
   return (
-    <CitiesContext.Provider value={{ cities, isLoading, currentCity, getCity }}>
+    <CitiesContext.Provider
+      value={{
+        cities,
+        isLoading,
+        currentCity,
+        getCity,
+        createCity,
+      }}
+    >
       {children}
     </CitiesContext.Provider>
   );
