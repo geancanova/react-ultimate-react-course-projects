@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -12,21 +12,20 @@ import { useCities } from "../contexts/CityContext";
 import { useGeolocation } from "../hooks/useGeolocation";
 import styles from "./Map.module.css";
 import { useEffect } from "react";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 
 import Button from "../components/Button";
+import EmojiFlagImage from "./EmojiFlagImage";
 
 function Map() {
   const { cities } = useCities();
   const [mapPosition, setMapPosition] = useState([40, 0]);
-  const [searchParams] = useSearchParams();
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     getPosition,
   } = useGeolocation();
-
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  const [mapLat, mapLng] = useUrlPosition();
 
   useEffect(
     function () {
@@ -67,7 +66,9 @@ function Map() {
             key={city.id}
           >
             <Popup>
-              <span>{city.emoji}</span>
+              <span>
+                <EmojiFlagImage emoji={city.emoji} />
+              </span>
               <span>{city.cityName}</span>
             </Popup>
           </Marker>
