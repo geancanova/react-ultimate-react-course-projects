@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCities } from "../contexts/CityContext";
+
 import styles from "./City.module.css";
+
 import Spinner from "./Spinner";
 import BackButton from "./BackButton";
+import EmojiFlagImage from "./EmojiFlagImage";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -36,7 +39,10 @@ function City() {
       <div className={styles.row}>
         <h6>City name</h6>
         <h3>
-          <span>{emoji}</span> {cityName}
+          <span>
+            <EmojiFlagImage emoji={emoji} />
+          </span>{" "}
+          {cityName}
         </h3>
       </div>
 
