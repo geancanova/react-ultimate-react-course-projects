@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUrlPosition } from "../hooks/useUrlPosition";
-import { useCities } from "../contexts/CityContext";
+import { useCities } from "../contexts/CitiesContext";
 
 import styles from "./Form.module.css";
 import "react-datepicker/dist/react-datepicker.css";

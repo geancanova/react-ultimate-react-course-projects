@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCities } from "../contexts/CityContext";
+import { useCities } from "../contexts/CitiesContext";
 
 import styles from "./City.module.css";
 
