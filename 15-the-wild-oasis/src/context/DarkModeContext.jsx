@@ -11,11 +11,11 @@ function DarkModeProvider({ children }) {
       const html = document.documentElement;
 
       if (isDarkMode) {
-        html.classList.remove("dark-mode");
-        html.classList.add("light-mode");
-      } else {
-        html.classList.remove("light-mode");
         html.classList.add("dark-mode");
+        html.classList.remove("light-mode");
+      } else {
+        html.classList.add("light-mode");
+        html.classList.remove("dark-mode");
       }
     },
     [isDarkMode]
