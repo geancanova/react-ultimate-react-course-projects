@@ -34,7 +34,7 @@ function formatDay(dateStr) {
 
 class App extends React.Component {
   state = {
-    location: "Porto Alegre",
+    location: "",
     isLoading: false,
     displayLocation: {
       city: "",
@@ -44,6 +44,8 @@ class App extends React.Component {
   };
 
   fetchWeather = async () => {
+    if (this.state.location.length < 2) return this.setState({ weather: {} });
+
     try {
       this.setState({ isLoading: true });
 
@@ -79,6 +81,21 @@ class App extends React.Component {
 
   setLocation = (e) => this.setState({ location: e.target.value });
 
+  // useEffect []
+  componentDidMount() {
+    // this.fetchWeather();
+    this.setState({ location: localStorage.getItem("location") || "" });
+  }
+
+  // useEffect [location]
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.location !== prevState.location) {
+      this.fetchWeather();
+
+      localStorage.setItem("location", this.state.location);
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -89,9 +106,9 @@ class App extends React.Component {
           onChangeLocation={this.setLocation}
         />
 
-        <button className="btn" onClick={this.fetchWeather}>
+        {/* <button className="btn" onClick={this.fetchWeather}>
           Get weather
-        </button>
+        </button> */}
 
         {this.state.isLoading && <p className="loader">Loading...</p>}
 
@@ -125,6 +142,10 @@ class Input extends React.Component {
 }
 
 class Weather extends React.Component {
+  componentWillUnmount() {
+    console.log("Weather is unmounting");
+  }
+
   render() {
     const {
       temperature_2m_max: max,
