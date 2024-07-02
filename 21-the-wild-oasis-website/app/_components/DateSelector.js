@@ -63,7 +63,7 @@ function DateSelector({ settings, bookedDates, cabin }) {
               </p>
               <p>
                 <span className="text-lg font-bold uppercase">Total</span>{" "}
-                <span className="text-2xl font-semibold">${cabinPrice}</span>
+                <span className="text-2xl font-semibold">${cabinPrice * numNights}</span>
               </p>
             </>
           ) : null}
