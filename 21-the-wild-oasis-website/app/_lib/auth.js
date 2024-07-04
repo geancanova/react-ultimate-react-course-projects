@@ -12,10 +12,15 @@ const authConfig = {
     authorized({ auth, request }) {
       return !!auth?.user; // !! converts to a boolean value
     }
+  },
+  pages: {
+    signIn: "/login"
   }
 };
 
 export const {
   auth,
+  signIn,
+  signOut,
   handlers: { GET, POST }
 } = NextAuth(authConfig)
