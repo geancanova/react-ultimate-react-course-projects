@@ -23,8 +23,6 @@ function ReservationCard({ booking }) {
     cabins: { name, image },
   } = booking;
 
-  console.log(booking);
-
   return (
     <div className='flex border border-primary-800'>
       <div className='relative h-32 aspect-square'>
