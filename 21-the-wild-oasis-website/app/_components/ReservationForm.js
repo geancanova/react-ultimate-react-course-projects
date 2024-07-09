@@ -1,10 +1,38 @@
 'use client';
 
-// import { useReservation } from "./ReservationContext";
+import { useReservation } from "@/app/_components/ReservationContext";
+import { createBooking } from "@/app/_lib/actions";
+import { differenceInDays } from "date-fns";
+import Image from "next/image";
+import SubmitButton from "./SubmitButton";
 
 function ReservationForm({ cabin, user }) {
-  const { maxCapacity } = cabin;
-  // const { range } = useReservation();
+  const { range, resetRange } = useReservation();
+  const { maxCapacity, regularPrice, discount, id } = cabin;
+
+  const startDate = range?.from;
+  const endDate = range?.to;
+  const numNights = differenceInDays(endDate, startDate);
+  const cabinPrice = regularPrice - discount;
+  const totalPrice = numNights * (regularPrice - discount);
+
+  const bookingData = {
+    startDate,
+    endDate,
+    numNights,
+    cabinPrice,
+    totalPrice,
+    cabinId: id
+  };
+
+  console.log(bookingData);
+
+  const createBookingWithData = createBooking.bind(null, bookingData);
+
+  async function handleSubmit(formData) {
+    await createBookingWithData(formData);
+    resetRange();
+  }
 
   return (
     <div className='scale-[1.01]'>
@@ -12,18 +40,23 @@ function ReservationForm({ cabin, user }) {
         <p>Logged in as</p>
 
         <div className='flex gap-4 items-center'>
-          <img
-            // Important to display google profile images
+          <Image
             referrerPolicy='no-referrer'
             className='h-8 rounded-full'
             src={user.image}
             alt={user.name}
+            width={32}
+            height={32}
           />
           <p>{user.name}</p>
         </div>
       </div>
 
-      <form className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col'>
+      <form
+        // action={createBookingWithData} 
+        action={handleSubmit}
+        className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col'
+      >
         <div className='space-y-2'>
           <label htmlFor='numGuests'>How many guests?</label>
           <select
@@ -58,9 +91,12 @@ function ReservationForm({ cabin, user }) {
         <div className='flex justify-end items-center gap-6'>
           <p className='text-primary-300 text-base'>Start by selecting dates</p>
 
-          <button className='bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300'>
+          <SubmitButton
+            pendingText='Reserving...'
+            isDisabled={!(startDate && endDate)}
+          >
             Reserve now
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </div>
