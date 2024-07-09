@@ -25,8 +25,6 @@ function ReservationForm({ cabin, user }) {
     cabinId: id
   };
 
-  console.log(bookingData);
-
   const createBookingWithData = createBooking.bind(null, bookingData);
 
   async function handleSubmit(formData) {
