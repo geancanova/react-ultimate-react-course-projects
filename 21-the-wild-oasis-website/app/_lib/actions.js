@@ -41,10 +41,11 @@ export async function createBooking(bookingData, formData) {
     guestId: session.user.guestId,
     numGuests: Number(formData.get('numGuests')),
     observations: formData.get('observations').slice(0, 1000),
-    extrasPrice: 0,
-    totalPrice: bookingData.cabinPrice,
+    extrasPrice: bookingData.extrasPrice,
+    cabinPrice: bookingData.cabinPrice,
+    totalPrice: bookingData.totalPrice,
+    hasBreakfast: bookingData.hasBreakfast,
     isPaid: false,
-    hasBreakfast: false,
     status: 'unconfirmed',
   };
 
@@ -77,7 +78,7 @@ export async function deleteBooking(bookingId) {
   revalidatePath('/account/reservations');
 }
 
-export async function updateBooking(formData) {
+export async function updateBooking(bookingData, formData) {
   const bookingId = Number(formData.get('bookingId'));
 
   // 1) Authentication
@@ -92,8 +93,12 @@ export async function updateBooking(formData) {
 
   // 3) Build update data
   const updateData = {
+    ...bookingData,
     numGuests: Number(formData.get('numGuests')),
     observations: formData.get('observations').slice(0, 1000),
+    hasBreakfast: bookingData.hasBreakfast,
+    extrasPrice: bookingData.extrasPrice,
+    totalPrice: bookingData.totalPrice,
   };
 
   // 4) Mutation

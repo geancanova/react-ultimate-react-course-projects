@@ -16,7 +16,7 @@ function isAlreadyBooked(range, datesArr) {
 }
 
 function DateSelector({ settings, bookedDates, cabin }) {
-  const { range, setRange, resetRange } = useReservation();
+  const { range, setRange, resetRange, totalPrice } = useReservation();
 
   const displayRange = isAlreadyBooked(range, bookedDates) ?
     {} :
@@ -24,25 +24,26 @@ function DateSelector({ settings, bookedDates, cabin }) {
 
   const { regularPrice, discount } = cabin;
   const numNights = differenceInDays(displayRange?.to, displayRange?.from);
-  const cabinPrice = numNights * (regularPrice - discount);
   const { minBookingLength, maxBookingLength } = settings;
 
   return (
     <div className="flex flex-col justify-between">
-      <DayPicker
-        className="pt-12 place-self-center"
-        mode="range"
-        onSelect={setRange}
-        selected={displayRange}
-        min={minBookingLength + 1}
-        max={maxBookingLength}
-        fromMonth={new Date()}
-        fromDate={new Date()}
-        toYear={new Date().getFullYear() + 5}
-        captionLayout="dropdown"
-        numberOfMonths={2}
-        disabled={(curDate) => isPast(curDate) || bookedDates.some(date => isSameDay(date, curDate))}
-      />
+      <div className="flex flex-1 items-center justify-center">
+        <DayPicker
+          className="pt-12 place-self-center"
+          mode="range"
+          onSelect={setRange}
+          selected={displayRange}
+          min={minBookingLength + 1}
+          max={maxBookingLength}
+          fromMonth={new Date()}
+          fromDate={new Date()}
+          toYear={new Date().getFullYear() + 5}
+          captionLayout="dropdown"
+          numberOfMonths={2}
+          disabled={(curDate) => isPast(curDate) || bookedDates.some(date => isSameDay(date, curDate))}
+        />
+      </div>
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
         <div className="flex items-baseline gap-6">
@@ -66,7 +67,7 @@ function DateSelector({ settings, bookedDates, cabin }) {
               </p>
               <p>
                 <span className="text-lg font-bold uppercase">Total</span>{" "}
-                <span className="text-2xl font-semibold">${cabinPrice}</span>
+                <span className="text-2xl font-semibold">${totalPrice}</span>
               </p>
             </>
           ) : null}
