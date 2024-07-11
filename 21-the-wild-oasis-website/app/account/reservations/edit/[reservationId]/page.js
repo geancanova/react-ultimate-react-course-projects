@@ -1,5 +1,5 @@
 import { getBooking, getCabin, getSettings } from "@/app/_lib/data-service";
-import UpdateReservationForm from "app/_components/UpdateReservationForm";
+import UpdateReservationForm from "@/app/_components/UpdateReservationForm";
 
 export async function generateMetadata({ params }) {
   return {
