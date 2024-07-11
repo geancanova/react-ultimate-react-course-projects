@@ -33,8 +33,12 @@ function SideNavigation() {
   return (
     <nav className='border-r border-primary-900'>
       <ul className='flex flex-col gap-2 h-full text-lg'>
-        {navLinks.map((link) => (
-          <li key={link.name}>
+        {navLinks.map((link, index) => (
+          <li
+            className="sticky"
+            style={{ top: `${index * 60}px` }}
+            key={link.name}
+          >
             <Link
               className={`py-3 px-5 hover:bg-primary-900 hover:text-primary-100 transition-colors flex items-center gap-4 font-semibold text-primary-200 ${pathname === link.href ? 'bg-primary-900' : ''}`}
               href={link.href}
